@@ -92,7 +92,7 @@ data class BiliHookSymbols(
         .putOpt("videoQuality", videoQuality?.toJson())
 
     companion object {
-        const val CACHE_SCHEMA_VERSION = 38
+        const val CACHE_SCHEMA_VERSION = 39
 
         fun fromJson(raw: String?): BiliHookSymbols? {
             if (raw.isNullOrBlank()) return null
@@ -241,7 +241,6 @@ data class ShareSymbols(
     val shareChannelsSetText: MethodDescriptor? = null,
     val shareChannelItemGetJumpLink: MethodDescriptor? = null,
     val shareChannelItemSetJumpLink: MethodDescriptor? = null,
-    val shareClickResultClassName: String? = null,
     val shareBaseInfoClassName: String? = null,
     val shareContentClassName: String? = null,
     val shareContentCopyMethods: List<MethodDescriptor>,
@@ -272,7 +271,6 @@ data class ShareSymbols(
         .putOpt("shareChannelsSetText", shareChannelsSetText?.toJson())
         .putOpt("shareChannelItemGetJumpLink", shareChannelItemGetJumpLink?.toJson())
         .putOpt("shareChannelItemSetJumpLink", shareChannelItemSetJumpLink?.toJson())
-        .putOpt("shareClickResultClassName", shareClickResultClassName)
         .putOpt("shareBaseInfoClassName", shareBaseInfoClassName)
         .putOpt("shareContentClassName", shareContentClassName)
         .put("shareContentCopyMethods", shareContentCopyMethods.toJsonArray { it.toJson() })
@@ -304,7 +302,6 @@ data class ShareSymbols(
             shareChannelsSetText = shareChannelsSetText.restoreOptional(classLoader),
             shareChannelItemGetJumpLink = shareChannelItemGetJumpLink.restoreOptional(classLoader),
             shareChannelItemSetJumpLink = shareChannelItemSetJumpLink.restoreOptional(classLoader),
-            shareClickResultClass = shareClickResultClassName?.let(classLoader::loadClassOrNull),
             shareBaseInfoClass = shareBaseInfoClassName?.let(classLoader::loadClassOrNull),
             shareContentClass = shareContentClassName?.let(classLoader::loadClassOrNull),
             shareContentCopyMethods = shareContentCopyMethods.restoreAvailable(classLoader),
@@ -338,7 +335,6 @@ data class ShareSymbols(
                 ?.let(MethodDescriptor::fromJson),
             shareChannelItemSetJumpLink = obj.optJSONObject("shareChannelItemSetJumpLink")
                 ?.let(MethodDescriptor::fromJson),
-            shareClickResultClassName = obj.optString("shareClickResultClassName").takeIf { it.isNotBlank() },
             shareBaseInfoClassName = obj.optString("shareBaseInfoClassName").takeIf { it.isNotBlank() },
             shareContentClassName = obj.optString("shareContentClassName").takeIf { it.isNotBlank() },
             shareContentCopyMethods = obj.optJSONArray("shareContentCopyMethods").toList {
@@ -378,7 +374,6 @@ data class RestoredShareSymbols(
     val shareChannelsSetText: Method?,
     val shareChannelItemGetJumpLink: Method?,
     val shareChannelItemSetJumpLink: Method?,
-    val shareClickResultClass: Class<*>?,
     val shareBaseInfoClass: Class<*>?,
     val shareContentClass: Class<*>?,
     val shareContentCopyMethods: List<Method>,
@@ -1965,10 +1960,12 @@ data class TripleSpeedSymbols(
     val experimentReaderMethod: MethodDescriptor,
     val qualitySpeedResetMethod: MethodDescriptor? = null,
     val highFrameRateSpeedGuardMethod: MethodDescriptor? = null,
+    val longPressSpeedMethod: MethodDescriptor? = null,
     val evidence: String,
 ) {
     fun toJson(): JSONObject = JSONObject()
         .put("experimentReaderMethod", experimentReaderMethod.toJson())
+        .putOpt("longPressSpeedMethod", longPressSpeedMethod?.toJson())
         .putOpt("qualitySpeedResetMethod", qualitySpeedResetMethod?.toJson())
         .putOpt("highFrameRateSpeedGuardMethod", highFrameRateSpeedGuardMethod?.toJson())
         .put("evidence", evidence)
@@ -1979,6 +1976,7 @@ data class TripleSpeedSymbols(
             experimentReaderMethod = method,
             qualitySpeedResetMethod = qualitySpeedResetMethod.restoreOptional(classLoader),
             highFrameRateSpeedGuardMethod = highFrameRateSpeedGuardMethod.restoreOptional(classLoader),
+            longPressSpeedMethod = longPressSpeedMethod.restoreOptional(classLoader),
         )
     }
 
@@ -1988,6 +1986,7 @@ data class TripleSpeedSymbols(
             qualitySpeedResetMethod = obj.optJSONObject("qualitySpeedResetMethod")?.let(MethodDescriptor::fromJson),
             highFrameRateSpeedGuardMethod = obj.optJSONObject("highFrameRateSpeedGuardMethod")
                 ?.let(MethodDescriptor::fromJson),
+            longPressSpeedMethod = obj.optJSONObject("longPressSpeedMethod")?.let(MethodDescriptor::fromJson),
             evidence = obj.optString("evidence", "-"),
         )
     }
@@ -1997,6 +1996,7 @@ data class RestoredTripleSpeedSymbols(
     val experimentReaderMethod: Method,
     val qualitySpeedResetMethod: Method?,
     val highFrameRateSpeedGuardMethod: Method?,
+    val longPressSpeedMethod: Method?,
 )
 
 data class CustomSkinSymbols(
@@ -2395,10 +2395,5 @@ private fun <T> Iterable<T>.toJsonArray(mapper: (T) -> JSONObject): JSONArray =
 
 internal fun Context.packageVersionCodeLong(): Long {
     val info = packageManager.getPackageInfo(packageName, 0)
-    @Suppress("DEPRECATION")
-    return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-        info.longVersionCode
-    } else {
-        info.versionCode.toLong()
-    }
+    return info.longVersionCode
 }

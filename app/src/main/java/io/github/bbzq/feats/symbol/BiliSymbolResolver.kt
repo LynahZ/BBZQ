@@ -49,7 +49,6 @@ object BiliSymbolResolver {
     private const val HP_SHARE = "ShareHook.InstallPoints"
     private const val HP_SHARE_LEGACY = "ShareHook.LegacyShareClickResult"
     private const val HP_SHARE_CHANNELS = "ShareHook.ShareChannels"
-    private const val HP_SHARE_CLICK_RESULT = "ShareHook.ShareClickResult"
     private const val HP_SHARE_BASE_INFO = "ShareHook.ShareBaseInfo"
     private const val HP_SHARE_CONTENT = "ShareHook.ShareContent"
     private const val HP_SHARE_BILI_CONTENT = "ShareHook.ShareBiliContent"
@@ -147,7 +146,7 @@ object BiliSymbolResolver {
     private const val HP_VIDEO_QUALITY = "VideoQualityHook.QualityStrategy"
     private const val PLAY_SPEED_EXPERIMENT_PREF_KEY = "sp_play_speed_experiment"
     private const val HIGH_FRAME_RATE_SPEED_RESET_LOG = "reset 3x speed because target quality"
-    private const val PLAY_SPEED_UTILS_CLASS = "com.bilibili.playerbizcommonv2.utils.D"
+    private const val PLAY_SPEED_ARCHIVE_INFO_KEY = "united_player_archive_info"
 
     @Volatile
     private var memorySymbols: BiliHookSymbols? = null
@@ -201,7 +200,7 @@ object BiliSymbolResolver {
                     writeCache(prefs, fingerprint, fullSymbols, log)
                     memorySymbols = fullSymbols
                     log("BiliSymbolResolver: async full DexKit scan completed and cached fp=$fingerprint", null)
-                    publishStatus(prefs, fullSymbols, log)
+                    publishStatus(appContext, fullSymbols, log)
                     onSymbolsUpdated?.invoke(fullSymbols)
                 }.onFailure { throwable ->
                     log("BiliSymbolResolver: async full DexKit scan failed", throwable)
@@ -222,7 +221,7 @@ object BiliSymbolResolver {
         memorySymbols = scanned
         log("BiliSymbolResolver scan done fp=$fingerprint", null)
         scanned.formatStatusLines().forEach { line -> log(line, null) }
-        publishStatus(prefs, scanned, log)
+        publishStatus(appContext, scanned, log)
         return scanned
     }
 
@@ -248,7 +247,7 @@ object BiliSymbolResolver {
         memorySymbols = scanned
         log("BiliSymbolResolver force scan done fp=$fingerprint", null)
         scanned.formatStatusLines().forEach { line -> log(line, null) }
-        publishStatus(prefs, scanned, log)
+        publishStatus(appContext, scanned, log)
         return scanned
     }
 
@@ -374,7 +373,7 @@ object BiliSymbolResolver {
             scanChronosPromotion(classLoader, ::bridge)
         }
         val fullNumberFormat = scanHookPoint(HP_FULL_NUMBER_FORMAT, hookPoints, scanErrors, log) {
-            scanFullNumberFormat(classLoader)
+            scanFullNumberFormat(classLoader, ::bridge)
         }
         val tripleSpeed = scanHookPoint(HP_TRIPLE_SPEED, hookPoints, scanErrors, log) {
             scanTripleSpeed(classLoader, ::bridge)
@@ -559,12 +558,6 @@ object BiliSymbolResolver {
             shareChannelItemSetJumpLink,
         ).size
 
-        val shareClickResultScan = findShareClickResultClass(classLoader, bridge)
-        val shareClickResultClass = shareClickResultScan.type
-        val shareClickResultCount = shareClickResultClass?.declaredConstructors
-            ?.count { it.isShareClickResultConstructor() }
-            ?: 0
-
         val shareBaseInfoScan = findShareBaseInfoClass(classLoader, bridge)
         val shareBaseInfoClass = shareBaseInfoScan.type
         val shareBaseInfoCount = shareBaseInfoClass?.declaredConstructors
@@ -619,12 +612,6 @@ object BiliSymbolResolver {
                 "methods=$shareChannelsCount",
             ),
             optionalChildHookPoint(
-                HP_SHARE_CLICK_RESULT,
-                shareClickResultCount > 0,
-                shareClickResultScan.missingReason("share click result class not found"),
-                "constructors=$shareClickResultCount",
-            ),
-            optionalChildHookPoint(
                 HP_SHARE_BASE_INFO,
                 shareBaseInfoCount > 0,
                 shareBaseInfoScan.missingReason("share base info class not found"),
@@ -635,7 +622,7 @@ object BiliSymbolResolver {
             optionalChildHookPoint(HP_SHARE_COPY_CONTENT, copyContentCount > 0, "copy content hooks not found", "methods=$copyContentCount"),
             optionalChildHookPoint(HP_SHARE_COPY_UTILITY, copyUtilityCount > 0, "copy utility hook not found", "methods=$copyUtilityCount"),
         )
-        val total = legacyCount + shareChannelsCount + shareClickResultCount + shareBaseInfoCount +
+        val total = legacyCount + shareChannelsCount + shareBaseInfoCount +
             shareContentCount + shareBiliContentCount + copyContentCount + copyUtilityCount + 1
         val symbols = ShareSymbols(
             legacyGetLink = legacyGetLink?.let(MethodDescriptor::of),
@@ -652,7 +639,6 @@ object BiliSymbolResolver {
             shareChannelsSetText = shareChannelsSetText?.let(MethodDescriptor::of),
             shareChannelItemGetJumpLink = shareChannelItemGetJumpLink?.let(MethodDescriptor::of),
             shareChannelItemSetJumpLink = shareChannelItemSetJumpLink?.let(MethodDescriptor::of),
-            shareClickResultClassName = shareClickResultClass?.name,
             shareBaseInfoClassName = shareBaseInfoClass?.name,
             shareContentClassName = shareContentClass?.name,
             shareContentCopyMethods = shareContentCopyMethods.map(MethodDescriptor::of),
@@ -1467,24 +1453,42 @@ object BiliSymbolResolver {
             qualityResetCandidates.isEmpty() -> null
             else -> null
         }
-        val highFrameRateSpeedGuard = classLoader.loadClassOrNull(PLAY_SPEED_UTILS_CLASS)
-            ?.declaredMethods
-            ?.firstOrNull {
+        val longPressSpeed = runCatching {
+            currentBridge.findMethod(
+                FindMethod.create()
+                    .matcher(MethodMatcher.create().usingStrings(PLAY_SPEED_ARCHIVE_INFO_KEY)),
+            )
+        }.getOrNull()
+            ?.mapNotNull { runCatching { it.getMethodInstance(classLoader) }.getOrNull() }
+            ?.filter {
                 Modifier.isStatic(it.modifiers) &&
-                    it.name == "c" &&
+                    it.parameterCount == 1 &&
+                    it.parameterTypes[0] != String::class.java &&
+                    it.returnType == Float::class.javaPrimitiveType
+            }
+            ?.distinctBy(Method::toGenericString)
+            ?.singleOrNull()
+            ?.apply { isAccessible = true }
+        val highFrameRateSpeedGuard = longPressSpeed?.declaringClass
+            ?.declaredMethods
+            ?.filter {
+                Modifier.isStatic(it.modifiers) &&
                     it.parameterCount == 1 &&
                     it.parameterTypes[0] == Float::class.javaPrimitiveType &&
                     it.returnType == Boolean::class.javaPrimitiveType
             }
+            ?.singleOrNull()
             ?.apply { isAccessible = true }
         val symbols = TripleSpeedSymbols(
             experimentReaderMethod = MethodDescriptor.of(reader),
             qualitySpeedResetMethod = qualityReset?.let(MethodDescriptor::of),
             highFrameRateSpeedGuardMethod = highFrameRateSpeedGuard?.let(MethodDescriptor::of),
+            longPressSpeedMethod = longPressSpeed?.let(MethodDescriptor::of),
             evidence = "${reader.declaringClass.name}.${reader.name},strings=${methodData.size}," +
                 "qualityReset=${qualityReset?.let { "${it.declaringClass.name}.${it.name}" } ?: "missing"}," +
                 "qualityStrings=${qualityResetData.size}," +
-                "highFrameGuard=${highFrameRateSpeedGuard?.let { "${it.declaringClass.name}.${it.name}" } ?: "missing"}",
+                "highFrameGuard=${highFrameRateSpeedGuard?.let { "${it.declaringClass.name}.${it.name}" } ?: "missing"}," +
+                "longPressSpeed=${longPressSpeed?.let { "${it.declaringClass.name}.${it.name}" } ?: "missing"}",
         )
         return SymbolScanResult.Found(symbols, symbols.evidence, symbols.evidence)
     }
@@ -1726,15 +1730,6 @@ object BiliSymbolResolver {
             .toList()
     }
 
-    private fun findShareClickResultClass(
-        classLoader: ClassLoader,
-        bridge: () -> DexKitBridge?,
-    ): ClassStringScan {
-        return findClassByString(classLoader, bridge, SHARE_CLICK_RESULT_DESCRIPTOR) { type ->
-            type.isShareClickResultType()
-        }
-    }
-
     private fun findShareBaseInfoClass(
         classLoader: ClassLoader,
         bridge: () -> DexKitBridge?,
@@ -1775,27 +1770,6 @@ object BiliSymbolResolver {
                 candidates = candidates.size,
             )
         }
-    }
-
-    private fun Class<*>.isShareClickResultType(): Boolean =
-        declaredConstructors.any { it.isShareClickResultConstructor() }
-
-    private fun java.lang.reflect.Constructor<*>.isShareClickResultConstructor(): Boolean {
-        val params = parameterTypes
-        if (params.size != 13) return false
-        return params[0] == Int::class.javaPrimitiveType &&
-            params[1] == java.lang.Integer::class.java &&
-            params[2] == String::class.java &&
-            params[3] == String::class.java &&
-            params[4] == String::class.java &&
-            params[5] == String::class.java &&
-            params[6] == String::class.java &&
-            params[7] == java.lang.Integer::class.java &&
-            params[8] == String::class.java &&
-            params[9] == String::class.java &&
-            params[10] == String::class.java &&
-            params[11] == String::class.java &&
-            params[12] == java.lang.Boolean::class.java
     }
 
     private fun Class<*>.isShareBaseInfoType(): Boolean =
@@ -2801,29 +2775,86 @@ object BiliSymbolResolver {
 
     private fun scanFullNumberFormat(
         classLoader: ClassLoader,
+        bridge: () -> DexKitBridge?,
     ): SymbolScanResult<FullNumberFormatSymbols> {
         val formatterClasses = NUMBER_FORMAT_CLASS_NAMES
             .asSequence()
             .mapNotNull { classLoader.loadClassOrNull(it) }
             .distinctBy { it.name }
             .toList()
-        val methods = formatterClasses
+        val legacyMethods = formatterClasses
             .asSequence()
             .flatMap { type -> type.allMethods() }
             .filter { method -> method.isFullNumberFormatterMethod() }
-            .distinctBy(Method::toGenericString)
             .toList()
+        // The KMP formatter (万/亿 threshold rules) backs newer screens; its core class is only
+        // reachable through the remote-config key it reads, so find it by that string.
+        val kmpCoreClass = bridge()?.let { currentBridge ->
+            runCatching {
+                currentBridge.findMethod(
+                    FindMethod.create().matcher(MethodMatcher.create().usingStrings(KMP_NUMBER_FORMAT_RULE_KEY)),
+                ).mapNotNull { runCatching { it.getMethodInstance(classLoader).declaringClass }.getOrNull() }
+                    .distinctBy { it.name }
+                    .singleOrNull()
+            }.getOrNull()
+        }
+        val kmpMethods = (formatterClasses + listOfNotNull(kmpCoreClass))
+            .asSequence()
+            .plus(KMP_NUMBER_FORMAT_FACADE_NAMES.mapNotNull { classLoader.loadClassOrNull(it) })
+            .distinctBy { it.name }
+            .flatMap { type -> type.declaredMethods.asSequence() }
+            .filter { method -> method.isKmpNumberFormatterMethod() }
+            .toList()
+        // Other call sites inline their own "万"/"亿" formatting; collect compact-count formatters by
+        // their unit strings. The hook only rewrites a result that provably equals the compact form
+        // of its numeric argument, so a loose match here cannot corrupt unrelated text.
+        val heuristicMethods = bridge()?.let { currentBridge ->
+            COMPACT_UNIT_STRINGS.flatMap { unit ->
+                runCatching {
+                    currentBridge.findMethod(
+                        FindMethod.create().matcher(MethodMatcher.create().usingStrings(unit)),
+                    ).mapNotNull { runCatching { it.getMethodInstance(classLoader) }.getOrNull() }
+                }.getOrDefault(emptyList())
+            }
+        }.orEmpty()
+            .filter { method ->
+                method.returnType == String::class.java &&
+                    method.parameterCount in 1..3 &&
+                    method.parameterTypes[0].let { it == Long::class.javaPrimitiveType || it == Int::class.javaPrimitiveType } &&
+                    !method.declaringClass.name.startsWith("kotlin.") &&
+                    !method.declaringClass.name.startsWith("android")
+            }
+            .onEach { it.isAccessible = true }
+            .take(MAX_HEURISTIC_NUMBER_METHODS)
+        val methods = (legacyMethods + kmpMethods + heuristicMethods).distinctBy(Method::toGenericString)
         if (methods.isEmpty()) return SymbolScanResult.Missing("number formatter methods not found")
 
         val symbols = FullNumberFormatSymbols(
             formatterMethods = methods.map(MethodDescriptor::of),
-            evidence = "classes=${formatterClasses.size},methods=${methods.size}",
+            evidence = "classes=${formatterClasses.size},legacy=${legacyMethods.size},kmp=${kmpMethods.size}," +
+                "kmpCore=${kmpCoreClass?.name ?: "missing"},heuristic=${heuristicMethods.size}",
         )
         return SymbolScanResult.Found(
             symbols,
             methods.joinToString("|") { "${it.declaringClass.name}.${it.name}" },
             symbols.evidence,
         )
+    }
+
+    // formatNumber(long|int, String, int) is the stable facade; the core class takes
+    // (long, int, boolean) and (int, int) and returns the formatted string directly.
+    private fun Method.isKmpNumberFormatterMethod(): Boolean {
+        if (!Modifier.isStatic(modifiers) || returnType != String::class.java) return false
+        val params = parameterTypes
+        val first = params.firstOrNull()
+        if (first != Long::class.javaPrimitiveType && first != Int::class.javaPrimitiveType) return false
+        val facade = name == "formatNumber" && params.size == 3 &&
+            params[1] == String::class.java && params[2] == Int::class.javaPrimitiveType
+        val coreLong = params.size == 3 && first == Long::class.javaPrimitiveType &&
+            params[1] == Int::class.javaPrimitiveType && params[2] == Boolean::class.javaPrimitiveType
+        val coreInt = params.size == 2 && first == Int::class.javaPrimitiveType &&
+            params[1] == Int::class.javaPrimitiveType
+        return facade || (declaringClass.name !in KMP_NUMBER_FORMAT_FACADE_NAMES && (coreLong || coreInt))
     }
 
     private fun Method.isFullNumberFormatterMethod(): Boolean {
@@ -4107,8 +4138,26 @@ object BiliSymbolResolver {
         }.onFailure { log("BiliSymbolResolver cache write failed", it) }
     }
 
-    private fun publishStatus(
+    internal fun publishStatus(
+        context: Context,
+        symbols: BiliHookSymbols,
+        log: (String, Throwable?) -> Unit,
+    ) {
+        val cachePrefs = context.getSharedPreferences(CACHE_PREFS_NAME, Context.MODE_PRIVATE)
+        val settingsPrefs = context.getSharedPreferences(ModuleSettings.PREFS_NAME, Context.MODE_PRIVATE)
+        publishStatusToPrefs(listOf(cachePrefs, settingsPrefs), symbols, log)
+    }
+
+    internal fun publishStatus(
         prefs: SharedPreferences,
+        symbols: BiliHookSymbols,
+        log: (String, Throwable?) -> Unit,
+    ) {
+        publishStatusToPrefs(listOf(prefs), symbols, log)
+    }
+
+    internal fun publishStatusToPrefs(
+        prefsList: List<SharedPreferences>,
         symbols: BiliHookSymbols,
         log: (String, Throwable?) -> Unit,
     ) {
@@ -4144,12 +4193,15 @@ object BiliSymbolResolver {
                 }
             }.trim()
 
-            val editor = prefs.edit()
-                .putString(ModuleSettings.KEY_SYMBOL_SCAN_STATUS_SUMMARY, summary)
-                .putString(ModuleSettings.KEY_SYMBOL_SCAN_STATUS_REPORT, report)
-                .putString(ModuleSettings.KEY_SYMBOL_SCAN_STATUS_UPDATED_AT, System.currentTimeMillis().toString())
-            if (!editor.commit()) {
-                log("BiliSymbolResolver publish status failed: commit returned false", null)
+            val updatedAt = System.currentTimeMillis().toString()
+            prefsList.forEach { targetPrefs ->
+                val editor = targetPrefs.edit()
+                    .putString(ModuleSettings.KEY_SYMBOL_SCAN_STATUS_SUMMARY, summary)
+                    .putString(ModuleSettings.KEY_SYMBOL_SCAN_STATUS_REPORT, report)
+                    .putString(ModuleSettings.KEY_SYMBOL_SCAN_STATUS_UPDATED_AT, updatedAt)
+                if (!editor.commit()) {
+                    log("BiliSymbolResolver publish status failed: commit returned false", null)
+                }
             }
         }.onFailure {
             log("BiliSymbolResolver publish status failed", it)
@@ -4205,6 +4257,7 @@ object BiliSymbolResolver {
     private val PREFERENCE_CLASS_NAMES = listOf(
         "com.bilibili.p4439app.preferences.settingWide.CornerPreference",
         "com.bilibili.app.preferences.settingWide.CornerPreference",
+        "tv.danmaku.bili.widget.preference.BLPreference",
         "tv.danmaku.p9138bili.widget.preference.BLPreference",
         "androidx.preference.Preference",
     )
@@ -4223,7 +4276,6 @@ object BiliSymbolResolver {
     private const val SHARE_LEGACY_RESULT = "com.bilibili.lib.sharewrapper.online.api.ShareClickResult"
     private const val SHARE_CHANNELS = "com.bilibili.lib.sharewrapper.online.api.ShareChannels"
     private const val SHARE_CHANNEL_ITEM = "com.bilibili.lib.sharewrapper.online.api.ShareChannels\$ChannelItem"
-    private const val SHARE_CLICK_RESULT_DESCRIPTOR = "kntr.common.share.core.model.ShareClickResult"
     private const val SHARE_BASE_INFO_TO_STRING = "ShareBaseInfo(title="
     private val SHARE_CONTENT_CLASSES = arrayOf(
         "kntr.common.share.domain.v1.ShareContent",
@@ -4281,6 +4333,7 @@ object BiliSymbolResolver {
     private val MINE_VIP_VIEW_CLASS_NAMES = listOf(
         "tv.danmaku.bili.ui.main2.mine.widgets.MineVipEntranceView",
         "tv.danmaku.p9138bili.p9228ui.main2.p9247mine.widgets.MineVipEntranceView",
+        "tv.danmaku.bili.ui.main2.mine.modularvip.VipEntranceView",
         "tv.danmaku.p9138bili.p9228ui.main2.p9247mine.modularvip.VipEntranceView",
     )
 
@@ -4377,6 +4430,7 @@ object BiliSymbolResolver {
     private val PEGASUS_RESPONSE_CLASSES = arrayOf(
         "com.bilibili.pegasus.data.base.PegasusResponse",
         "com.bilibili.pegasus.p5730data.p5731base.PegasusResponse",
+        "com.bilibili.pegasus.data.request.PegasusResponseWrapper",
         "com.bilibili.pegasus.p5730data.request.PegasusResponseWrapper",
     )
     private const val PEGASUS_HOLDER_DATA = "com.bilibili.pegasus.PegasusHolderData"
@@ -4415,7 +4469,16 @@ object BiliSymbolResolver {
     private val FULL_NUMBER_FORMAT_METHOD_NAMES = setOf(
         "format",
         "formatWithComma",
+        "formatTitle",
+        "formatStr",
+        "formatWithInter",
+        "formatLong",
+        "formatByEng",
     )
+    private val COMPACT_UNIT_STRINGS = listOf("万", "亿", "萬", "億")
+    private const val MAX_HEURISTIC_NUMBER_METHODS = 120
+    private const val KMP_NUMBER_FORMAT_RULE_KEY = "localization.number_format_rule"
+    private val KMP_NUMBER_FORMAT_FACADE_NAMES = listOf("kntr.base.localization.NumberFormat_androidKt")
     private val THESEUS_TAB_PAGER_SERVICE = arrayOf(
         "com.bilibili.ship.theseus.united.page.tab.TheseusTabPagerService",
         "com.bilibili.p5797ship.theseus.united.p5850page.p5861tab.TheseusTabPagerService",

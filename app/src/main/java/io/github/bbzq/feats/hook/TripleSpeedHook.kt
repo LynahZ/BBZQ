@@ -42,6 +42,14 @@ class TripleSpeedHook(env: RoamingEnv) : BaseRoamingHook(env) {
             if (field.get(result) !== target) field.set(result, target)
         }
 
+        symbols?.longPressSpeedMethod?.let { speedMethod ->
+            env.hookBefore(speedMethod) { param ->
+                if (!ModuleSettings.isPlayerCustomLongPressSpeedEnabled(prefs)) return@hookBefore
+                param.result = ModuleSettings.getPlayerCustomLongPressSpeedValue(prefs)
+            }
+            log("startHook: TripleSpeed, custom long-press speed at ${speedMethod.declaringClass.name}.${speedMethod.name}")
+        } ?: log("startHook: TripleSpeed, long-press speed method unavailable; custom multiplier disabled")
+
         symbols?.qualitySpeedResetMethod?.let { resetMethod ->
             env.hookBefore(resetMethod) { param ->
                 if (!ModuleSettings.isPlayerTripleSpeedEnabled(prefs)) return@hookBefore

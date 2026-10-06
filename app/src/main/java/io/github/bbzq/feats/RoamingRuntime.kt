@@ -11,6 +11,8 @@ import kotlin.LazyThreadSafetyMode
 import io.github.bbzq.feats.hook.BottomBarHook
 import io.github.bbzq.feats.hook.DaggerCircularDependencyFixHook
 import io.github.bbzq.feats.hook.AutoLikeHook
+import io.github.bbzq.feats.hook.AiDeclaredVideoHook
+import io.github.bbzq.feats.hook.PgcActivityPopupHook
 import io.github.bbzq.feats.hook.AccessKeyHook
 import io.github.bbzq.feats.hook.ChronosPromotionHook
 import io.github.bbzq.feats.hook.CustomThemeHook
@@ -25,6 +27,7 @@ import io.github.bbzq.feats.hook.FreeCopyHook
 import io.github.bbzq.feats.hook.HomeRecommendAdHook
 import io.github.bbzq.feats.hook.HomeRecommendPreloadHook
 import io.github.bbzq.feats.hook.HomeRecommendTabHook
+import io.github.bbzq.feats.hook.ComponentPoolBlockHook
 import io.github.bbzq.feats.hook.HomeComponentHideHook
 import io.github.bbzq.feats.hook.HomeTopBarPurifyHook
 import io.github.bbzq.feats.hook.SearchPurifyHook
@@ -34,11 +37,15 @@ import io.github.bbzq.feats.hook.ShareHook
 import io.github.bbzq.feats.hook.SkipVideoAdHook
 import io.github.bbzq.feats.hook.SkipVideoAdProgressHook
 import io.github.bbzq.feats.hook.SplashAdHook
+import io.github.bbzq.feats.hook.SplashAutoNightHook
+import io.github.bbzq.feats.hook.SplitScreenFullscreenHook
 import io.github.bbzq.feats.hook.StoryComponentAlphaHook
 import io.github.bbzq.feats.hook.StoryDanmakuHook
 import io.github.bbzq.feats.hook.StoryDefaultLaunchHook
+import io.github.bbzq.feats.hook.StoryDetailRedirectHook
 import io.github.bbzq.feats.hook.StoryFullscreenHook
 import io.github.bbzq.feats.hook.StoryPlayerAdHook
+import io.github.bbzq.feats.hook.BackgroundPlayHook
 import io.github.bbzq.feats.hook.BlockUpdateHook
 import io.github.bbzq.feats.hook.VideoCommentHook
 import io.github.bbzq.feats.hook.VideoDetailBannerAdHook
@@ -52,7 +59,9 @@ import io.github.bbzq.feats.hook.LongPressSpeedLockHook
 import io.github.bbzq.feats.hook.ReadEraHook
 import io.github.bbzq.feats.hook.BlockActivityMetaStickerHook
 import io.github.bbzq.feats.hook.WoMicHook
+import io.github.bbzq.feats.hook.LiveReservationHook
 import io.github.bbzq.feats.hook.LiveRoomBlurMaskHook
+import io.github.bbzq.feats.hook.LiveRoomVerticalSwipeHook
 import io.github.bbzq.feats.hook.MediaSessionFixHook
 import io.github.bbzq.feats.hook.VideoEndRecommendHook
 import io.github.bbzq.feats.symbol.BiliHookSymbols
@@ -163,6 +172,7 @@ object RoamingRuntime {
             )
 
             ProcessScope.DOWNLOAD -> listOf(
+                ::ComponentPoolBlockHook,
                 ::DownloadThreadHook,
                 ::CustomCdnHook,
             )
@@ -171,9 +181,11 @@ object RoamingRuntime {
                 ::DaggerCircularDependencyFixHook,
                 ::SettingHook,
                 ::SplashAdHook,
+                ::SplashAutoNightHook,
                 ::ShareHook,
                 ::FreeCopyHook,
                 ::BottomBarHook,
+                ::ComponentPoolBlockHook,
                 ::HomeComponentHideHook,
                 ::HomeRecommendAdHook,
                 ::HomeRecommendTabHook,
@@ -182,6 +194,7 @@ object RoamingRuntime {
                 ::HomeTopBarPurifyHook,
                 ::SearchPurifyHook,
                 ::StoryDefaultLaunchHook,
+                ::StoryDetailRedirectHook,
                 ::StoryPlayerAdHook,
                 ::StoryFullscreenHook,
                 ::StoryDanmakuHook,
@@ -197,6 +210,8 @@ object RoamingRuntime {
                 ::FakeWifiHook,
                 ::CustomCdnHook,
                 ::ChronosPromotionHook,
+                ::PgcActivityPopupHook,
+                ::AiDeclaredVideoHook,
                 ::SkipVideoAdHook,
                 ::SkipVideoAdProgressHook,
                 ::RewardAdHook,
@@ -210,6 +225,10 @@ object RoamingRuntime {
                 ::CustomThemeHook,
                 ::BlockActivityMetaStickerHook,
                 ::LiveRoomBlurMaskHook,
+                ::LiveReservationHook,
+                ::BackgroundPlayHook,
+                ::SplitScreenFullscreenHook,
+                ::LiveRoomVerticalSwipeHook,
                 ::MediaSessionFixHook,
                 ::VideoEndRecommendHook,
             )

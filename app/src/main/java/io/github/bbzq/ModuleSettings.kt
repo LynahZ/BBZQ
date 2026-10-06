@@ -11,6 +11,7 @@ object ModuleSettings {
     const val KEY_BLOCK_TEENAGERS_MODE_DIALOG_ENABLED = "block_teenagers_mode_dialog"
     const val KEY_BLOCK_UPDATE_ENABLED = "block_update_enabled"
     const val KEY_SKIP_SPLASH_AD_ENABLED = "skip_splash_ad_enabled"
+    const val KEY_SPLASH_AUTO_NIGHT_ENABLED = "splash_auto_night_enabled"
     const val KEY_SKIP_VIDEO_AD_ENABLED = "skip_video_ad_enabled"
     const val KEY_SKIP_VIDEO_AD_AUTO_LIKE_ENABLED = "skip_video_ad_auto_like_enabled"
     const val KEY_SKIP_VIDEO_AD_CATEGORIES = "skip_video_ad_categories"
@@ -21,6 +22,8 @@ object ModuleSettings {
     const val KEY_BLOCK_VIDEO_DETAIL_BANNER_AD_ENABLED = "block_video_detail_banner_ad_enabled"
     const val KEY_PURIFY_VIDEO_MENTION_ENABLED = "purify_video_mention_enabled"
     const val KEY_BLOCK_CHRONOS_PROMOTION_ENABLED = "block_chronos_promotion_enabled"
+    const val KEY_BLOCK_PGC_ACTIVITY_POPUP_ENABLED = "block_pgc_activity_popup_enabled"
+    const val KEY_BLOCK_AI_DECLARED_VIDEO_ENABLED = "block_ai_declared_video_enabled"
     const val KEY_UNLOCK_VIDEO_FEATURES_ENABLED = "unlock_video_features_enabled"
     const val KEY_UNLOCK_VIDEO_FEATURES_UI_ENABLED = "unlock_video_features_ui_enabled"
     const val KEY_UNLOCK_HIGHEST_BITRATE_ENABLED = "unlock_highest_bitrate_enabled"
@@ -32,7 +35,11 @@ object ModuleSettings {
     const val KEY_PLAYER_TRANSPARENT_STATUS_BAR_ENABLED = "player_transparent_status_bar_enabled"
     const val KEY_HIDE_PLAYER_PORTRAIT_CONTROL_ENABLED = "hide_player_portrait_control_enabled"
     const val KEY_PLAYER_TRIPLE_SPEED_ENABLED = "player_triple_speed_enabled"
+    const val KEY_DISABLE_BACKGROUND_PLAY_ENABLED = "disable_background_play_enabled"
+    const val KEY_SPLIT_SCREEN_FULLSCREEN_ENABLED = "split_screen_fullscreen_enabled"
     const val KEY_PLAYER_LONG_PRESS_SPEED_LOCK_ENABLED = "player_long_press_speed_lock_enabled"
+    const val KEY_PLAYER_CUSTOM_LONG_PRESS_SPEED_ENABLED = "player_custom_long_press_speed_enabled"
+    const val KEY_PLAYER_CUSTOM_LONG_PRESS_SPEED_VALUE = "player_custom_long_press_speed_value"
     const val KEY_FIX_LIVE_QUALITY_URL_ENABLED = "fix_live_quality_url_enabled"
     const val KEY_FAKE_WIFI_ENABLED = "fake_wifi_enabled"
     const val KEY_DISABLE_HALF_END_PAGE = "disable_half_end_page"
@@ -40,11 +47,20 @@ object ModuleSettings {
     const val KEY_FIX_MEDIA_SESSION_CARD = "fix_media_session_card"
     const val KEY_CUSTOM_CDN_ENABLED = "custom_cdn_enabled"
     const val KEY_CUSTOM_CDN_HOST = "custom_cdn_host"
+    const val KEY_CDN_WIFI_ENABLED = "cdn_wifi_enabled"
+    const val KEY_CDN_WIFI_PRIORITY = "cdn_wifi_priority"
+    const val KEY_CDN_CELLULAR_ENABLED = "cdn_cellular_enabled"
+    const val KEY_CDN_CELLULAR_PRIORITY = "cdn_cellular_priority"
+    const val KEY_CDN_AUDIO_INDEPENDENT = "cdn_audio_independent"
+    const val KEY_CDN_SPEED_TEST_SIZE_MB = "cdn_speed_test_size_mb"
+    const val KEY_CDN_SPEED_TEST_WARMUP_MB = "cdn_speed_test_warmup_mb"
+    const val KEY_CDN_SPEED_TEST_COOLDOWN_SEC = "cdn_speed_test_cooldown_sec"
+    const val KEY_CDN_SPEED_TEST_PARALLEL = "cdn_speed_test_parallel"
+    const val MAX_CDN_PRIORITY_NODES = 5
     const val KEY_PURIFY_HOME_RECOMMEND_AD_ENABLED = "purify_home_recommend_ad_enabled"
     const val KEY_PURIFY_HOME_RECOMMEND_PICTURE_ENABLED = "purify_home_recommend_picture_enabled"
     const val KEY_PURIFY_HOME_RECOMMEND_GAME_PROMO_ENABLED = "purify_home_recommend_game_promo_enabled"
     const val KEY_HOME_RECOMMEND_TITLE_KEYWORDS = "home_recommend_title_keywords"
-    const val KEY_HOME_RECOMMEND_VERTICAL_AV_DETAIL_ENABLED = "home_recommend_vertical_av_detail_enabled"
     const val KEY_HOME_RECOMMEND_PRELOAD_ENABLED = "home_recommend_preload_enabled"
     const val KEY_DYNAMIC_PREFERRED_VIDEO_TAB_ENABLED = "dynamic_preferred_video_tab_enabled"
     const val KEY_DYNAMIC_REMOVE_CITY_TAB_ENABLED = "dynamic_remove_city_tab_enabled"
@@ -58,12 +74,17 @@ object ModuleSettings {
     const val KEY_HIDDEN_VIDEO_DETAIL_RELATE_TYPES = "hidden_video_detail_relate_types"
     const val KEY_KNOWN_VIDEO_DETAIL_RELATE_TYPES = "known_video_detail_relate_types"
     const val KEY_VIDEO_DETAIL_RELATE_TITLE_KEYWORDS = "video_detail_relate_title_keywords"
+    const val KEY_BLOCK_ALL_COMPONENT_POOLS_ENABLED = "block_all_component_pools_enabled"
+    const val KEY_CUSTOM_COMPONENT_POOL_BLOCK_ENABLED = "custom_component_pool_block_enabled"
+    const val KEY_BLOCKED_COMPONENT_POOLS = "blocked_component_pools"
+    const val KEY_KNOWN_COMPONENT_POOLS = "known_component_pools"
     const val KEY_HIDE_ALL_HOME_COMPONENTS_ENABLED = "hide_all_home_components_enabled"
     const val KEY_CUSTOM_HOME_COMPONENT_HIDE_ENABLED = "custom_home_component_hide_enabled"
     const val KEY_HIDDEN_HOME_COMPONENTS = "hidden_home_components"
     const val KEY_KNOWN_HOME_COMPONENTS = "known_home_components"
     const val KEY_PURIFY_STORY_VIDEO_AD_ENABLED = "purify_story_video_ad_enabled"
     const val KEY_STORY_VIDEO_DEFAULT_LAUNCH_ENABLED = "story_video_default_launch_enabled"
+    const val KEY_STORY_VIDEO_AS_DETAIL_ENABLED = "story_video_as_detail_enabled"
     const val KEY_STORY_VIDEO_IMMERSIVE_FULLSCREEN_ENABLED = "story_video_immersive_fullscreen_enabled"
     const val KEY_STORY_VIDEO_KEEP_DANMAKU_ON_COMMENT_ENABLED = "story_video_keep_danmaku_on_comment_enabled"
     const val KEY_STORY_VIDEO_COMPONENT_ALPHA = "story_video_component_alpha"
@@ -75,6 +96,7 @@ object ModuleSettings {
     const val KEY_BLOCK_LIVE_RESERVATION_ENABLED = "block_live_reservation_enabled"
     const val KEY_BLOCK_LIVE_ROOM_QOE_POPUP_ENABLED = "block_live_room_qoe_popup_enabled"
     const val KEY_REMOVE_LIVE_ROOM_BLUR_MASK_ENABLED = "remove_live_room_blur_mask_enabled"
+    const val KEY_DISABLE_LIVE_ROOM_VERTICAL_SWIPE_ENABLED = "disable_live_room_vertical_swipe_enabled"
     const val KEY_DISABLE_LONG_PRESS_COPY_ENABLED = "disable_long_press_copy_enabled"
     const val KEY_ENHANCE_LONG_PRESS_COPY_ENABLED = "enhance_long_press_copy_enabled"
     const val KEY_CUSTOM_BOTTOM_BAR_ENABLED = "custom_bottom_bar_enabled"
@@ -90,6 +112,7 @@ object ModuleSettings {
     const val KEY_HIDE_HOME_SEARCH_DEFAULT_WORD_ENABLED = "hide_home_search_default_word_enabled"
     const val KEY_SEARCH_HOT_CLEAN_ENABLED = "search_hot_clean_enabled"
     const val KEY_SEARCH_SUGGEST_CLEAN_ENABLED = "search_suggest_clean_enabled"
+    const val KEY_SEARCH_RESULT_AD_BLOCK_ENABLED = "search_result_ad_block_enabled"
     const val KEY_FULL_NUMBER_FORMAT_ENABLED = "full_number_format_enabled"
     const val KEY_UNLOCK_COMMENT_GIF_ENABLED = "unlock_comment_gif_enabled"
     const val KEY_LAST_ACCESS_KEY = "last_access_key"
@@ -105,6 +128,7 @@ object ModuleSettings {
     const val KEY_COMMENT_NO_EMPTY_PAGE = "vid_comment_no_empty_page"
     const val KEY_COMMENT_NO_QOE = "vid_comment_no_qoe"
     const val KEY_COMMENT_NO_OPERATION = "vid_comment_no_operation"
+    const val KEY_COMMENT_NO_HOTSPOT = "vid_comment_no_hotspot"
     const val KEY_COMMENT_KEYWORD_FILTER_ENABLED = "vid_comment_keyword_filter_enabled"
     const val KEY_COMMENT_KEYWORDS = "vid_comment_keywords"
     const val KEY_COMMENT_MIN_LEVEL_ENABLED = "vid_comment_min_level_enabled"
@@ -123,6 +147,7 @@ object ModuleSettings {
     const val HOME_RECOMMEND_FILTER_GAME_PROMO = "game_promo"
     const val HOME_RECOMMEND_FILTER_LIVE = "live"
     const val HOME_RECOMMEND_FILTER_KETANG = "ketang"
+    const val HOME_RECOMMEND_FILTER_BANGUMI = "bangumi"
     const val HOME_RECOMMEND_FILTER_VERTICAL_AV = "vertical_av"
     const val HOME_RECOMMEND_FILTER_LARGE_COVER = "large_cover"
 
@@ -132,6 +157,7 @@ object ModuleSettings {
         HOME_RECOMMEND_FILTER_GAME_PROMO,
         HOME_RECOMMEND_FILTER_LIVE,
         HOME_RECOMMEND_FILTER_KETANG,
+        HOME_RECOMMEND_FILTER_BANGUMI,
         HOME_RECOMMEND_FILTER_VERTICAL_AV,
         HOME_RECOMMEND_FILTER_LARGE_COVER,
     )
@@ -202,6 +228,8 @@ object ModuleSettings {
     private var knownMineComponentsCache: Set<String>? = null
     @Volatile
     private var knownVideoDetailRelateTypesCache: Set<String>? = null
+    @Volatile
+    private var knownComponentPoolsCache: Set<String>? = null
 
     enum class ExportableValueType {
         BOOLEAN,
@@ -223,6 +251,7 @@ object ModuleSettings {
         ExportableConfigSpec(KEY_BLOCK_TEENAGERS_MODE_DIALOG_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_BLOCK_TEENAGERS_MODE_DIALOG_ENABLED, false) },
         ExportableConfigSpec(KEY_BLOCK_UPDATE_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_BLOCK_UPDATE_ENABLED, false) },
         ExportableConfigSpec(KEY_SKIP_SPLASH_AD_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_SKIP_SPLASH_AD_ENABLED, true) },
+        ExportableConfigSpec(KEY_SPLASH_AUTO_NIGHT_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_SPLASH_AUTO_NIGHT_ENABLED, false) },
         ExportableConfigSpec(KEY_SKIP_VIDEO_AD_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_SKIP_VIDEO_AD_ENABLED, false) },
         ExportableConfigSpec(KEY_SKIP_VIDEO_AD_AUTO_LIKE_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_SKIP_VIDEO_AD_AUTO_LIKE_ENABLED, false) },
         ExportableConfigSpec(KEY_SKIP_VIDEO_AD_SETTINGS_VISIBLE, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_SKIP_VIDEO_AD_SETTINGS_VISIBLE, false) },
@@ -231,6 +260,8 @@ object ModuleSettings {
         ExportableConfigSpec(KEY_BLOCK_VIDEO_DETAIL_BANNER_AD_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_BLOCK_VIDEO_DETAIL_BANNER_AD_ENABLED, false) },
         ExportableConfigSpec(KEY_PURIFY_VIDEO_MENTION_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_PURIFY_VIDEO_MENTION_ENABLED, false) },
         ExportableConfigSpec(KEY_BLOCK_CHRONOS_PROMOTION_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_BLOCK_CHRONOS_PROMOTION_ENABLED, false) },
+        ExportableConfigSpec(KEY_BLOCK_PGC_ACTIVITY_POPUP_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_BLOCK_PGC_ACTIVITY_POPUP_ENABLED, false) },
+        ExportableConfigSpec(KEY_BLOCK_AI_DECLARED_VIDEO_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_BLOCK_AI_DECLARED_VIDEO_ENABLED, false) },
         ExportableConfigSpec(KEY_UNLOCK_VIDEO_FEATURES_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_UNLOCK_VIDEO_FEATURES_ENABLED, false) },
         ExportableConfigSpec(KEY_UNLOCK_VIDEO_FEATURES_UI_ENABLED, ExportableValueType.BOOLEAN) {
             it.getBoolean(KEY_UNLOCK_VIDEO_FEATURES_UI_ENABLED, true)
@@ -260,15 +291,27 @@ object ModuleSettings {
         ExportableConfigSpec(KEY_VIDEO_DOWNLOAD_ENABLED, ExportableValueType.BOOLEAN) {
             it.getBoolean(KEY_VIDEO_DOWNLOAD_ENABLED, false)
         },
+        ExportableConfigSpec(KEY_SPLIT_SCREEN_FULLSCREEN_ENABLED, ExportableValueType.BOOLEAN) {
+            it.getBoolean(KEY_SPLIT_SCREEN_FULLSCREEN_ENABLED, false)
+        },
+        ExportableConfigSpec(KEY_DISABLE_BACKGROUND_PLAY_ENABLED, ExportableValueType.BOOLEAN) {
+            it.getBoolean(KEY_DISABLE_BACKGROUND_PLAY_ENABLED, false)
+        },
         ExportableConfigSpec(KEY_PLAYER_TRIPLE_SPEED_ENABLED, ExportableValueType.BOOLEAN) {
             it.getBoolean(KEY_PLAYER_TRIPLE_SPEED_ENABLED, false)
         },
+        ExportableConfigSpec(KEY_PLAYER_CUSTOM_LONG_PRESS_SPEED_ENABLED, ExportableValueType.BOOLEAN) {
+            it.getBoolean(KEY_PLAYER_CUSTOM_LONG_PRESS_SPEED_ENABLED, false)
+        },
         ExportableConfigSpec(KEY_FIX_LIVE_QUALITY_URL_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_FIX_LIVE_QUALITY_URL_ENABLED, false) },
         ExportableConfigSpec(KEY_CUSTOM_CDN_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_CUSTOM_CDN_ENABLED, false) },
+        ExportableConfigSpec(KEY_CDN_WIFI_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_CDN_WIFI_ENABLED, false) },
+        ExportableConfigSpec(KEY_CDN_CELLULAR_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_CDN_CELLULAR_ENABLED, false) },
+        ExportableConfigSpec(KEY_CDN_AUDIO_INDEPENDENT, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_CDN_AUDIO_INDEPENDENT, false) },
+        ExportableConfigSpec(KEY_CDN_SPEED_TEST_PARALLEL, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_CDN_SPEED_TEST_PARALLEL, true) },
         ExportableConfigSpec(KEY_PURIFY_HOME_RECOMMEND_AD_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_PURIFY_HOME_RECOMMEND_AD_ENABLED, false) },
         ExportableConfigSpec(KEY_PURIFY_HOME_RECOMMEND_PICTURE_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_PURIFY_HOME_RECOMMEND_PICTURE_ENABLED, false) },
         ExportableConfigSpec(KEY_PURIFY_HOME_RECOMMEND_GAME_PROMO_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_PURIFY_HOME_RECOMMEND_GAME_PROMO_ENABLED, false) },
-        ExportableConfigSpec(KEY_HOME_RECOMMEND_VERTICAL_AV_DETAIL_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_HOME_RECOMMEND_VERTICAL_AV_DETAIL_ENABLED, false) },
         ExportableConfigSpec(KEY_HOME_RECOMMEND_PRELOAD_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_HOME_RECOMMEND_PRELOAD_ENABLED, false) },
         ExportableConfigSpec(KEY_DYNAMIC_PREFERRED_VIDEO_TAB_ENABLED, ExportableValueType.BOOLEAN) {
             it.getBoolean(KEY_DYNAMIC_PREFERRED_VIDEO_TAB_ENABLED, false)
@@ -282,11 +325,16 @@ object ModuleSettings {
         ExportableConfigSpec(KEY_CUSTOM_HOME_RECOMMEND_FILTER_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_CUSTOM_HOME_RECOMMEND_FILTER_ENABLED, false) },
         ExportableConfigSpec(KEY_CUSTOM_HOME_RECOMMEND_TAB_FILTER_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_CUSTOM_HOME_RECOMMEND_TAB_FILTER_ENABLED, false) },
         ExportableConfigSpec(KEY_CUSTOM_VIDEO_DETAIL_RELATE_FILTER_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_CUSTOM_VIDEO_DETAIL_RELATE_FILTER_ENABLED, false) },
+        ExportableConfigSpec(KEY_BLOCK_ALL_COMPONENT_POOLS_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_BLOCK_ALL_COMPONENT_POOLS_ENABLED, false) },
+        ExportableConfigSpec(KEY_CUSTOM_COMPONENT_POOL_BLOCK_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_CUSTOM_COMPONENT_POOL_BLOCK_ENABLED, false) },
         ExportableConfigSpec(KEY_HIDE_ALL_HOME_COMPONENTS_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_HIDE_ALL_HOME_COMPONENTS_ENABLED, false) },
         ExportableConfigSpec(KEY_CUSTOM_HOME_COMPONENT_HIDE_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_CUSTOM_HOME_COMPONENT_HIDE_ENABLED, false) },
         ExportableConfigSpec(KEY_PURIFY_STORY_VIDEO_AD_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_PURIFY_STORY_VIDEO_AD_ENABLED, false) },
         ExportableConfigSpec(KEY_STORY_VIDEO_DEFAULT_LAUNCH_ENABLED, ExportableValueType.BOOLEAN) {
             it.getBoolean(KEY_STORY_VIDEO_DEFAULT_LAUNCH_ENABLED, false)
+        },
+        ExportableConfigSpec(KEY_STORY_VIDEO_AS_DETAIL_ENABLED, ExportableValueType.BOOLEAN) {
+            it.getBoolean(KEY_STORY_VIDEO_AS_DETAIL_ENABLED, false)
         },
         ExportableConfigSpec(KEY_STORY_VIDEO_IMMERSIVE_FULLSCREEN_ENABLED, ExportableValueType.BOOLEAN) {
             it.getBoolean(KEY_STORY_VIDEO_IMMERSIVE_FULLSCREEN_ENABLED, false)
@@ -299,6 +347,7 @@ object ModuleSettings {
         ExportableConfigSpec(KEY_BLOCK_LIVE_RESERVATION_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_BLOCK_LIVE_RESERVATION_ENABLED, false) },
         ExportableConfigSpec(KEY_BLOCK_LIVE_ROOM_QOE_POPUP_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_BLOCK_LIVE_ROOM_QOE_POPUP_ENABLED, false) },
         ExportableConfigSpec(KEY_REMOVE_LIVE_ROOM_BLUR_MASK_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_REMOVE_LIVE_ROOM_BLUR_MASK_ENABLED, false) },
+        ExportableConfigSpec(KEY_DISABLE_LIVE_ROOM_VERTICAL_SWIPE_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_DISABLE_LIVE_ROOM_VERTICAL_SWIPE_ENABLED, false) },
         ExportableConfigSpec(KEY_DISABLE_LONG_PRESS_COPY_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_DISABLE_LONG_PRESS_COPY_ENABLED, false) },
         ExportableConfigSpec(KEY_ENHANCE_LONG_PRESS_COPY_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_ENHANCE_LONG_PRESS_COPY_ENABLED, false) },
         ExportableConfigSpec(KEY_CUSTOM_BOTTOM_BAR_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_CUSTOM_BOTTOM_BAR_ENABLED, false) },
@@ -309,6 +358,7 @@ object ModuleSettings {
         ExportableConfigSpec(KEY_HIDE_HOME_SEARCH_DEFAULT_WORD_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_HIDE_HOME_SEARCH_DEFAULT_WORD_ENABLED, false) },
         ExportableConfigSpec(KEY_SEARCH_HOT_CLEAN_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_SEARCH_HOT_CLEAN_ENABLED, false) },
         ExportableConfigSpec(KEY_SEARCH_SUGGEST_CLEAN_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_SEARCH_SUGGEST_CLEAN_ENABLED, false) },
+        ExportableConfigSpec(KEY_SEARCH_RESULT_AD_BLOCK_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_SEARCH_RESULT_AD_BLOCK_ENABLED, false) },
         ExportableConfigSpec(KEY_FULL_NUMBER_FORMAT_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_FULL_NUMBER_FORMAT_ENABLED, false) },
         ExportableConfigSpec(KEY_UNLOCK_COMMENT_GIF_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_UNLOCK_COMMENT_GIF_ENABLED, false) },
         ExportableConfigSpec(KEY_HIDE_DESKTOP_ICON, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_HIDE_DESKTOP_ICON, false) },
@@ -321,6 +371,7 @@ object ModuleSettings {
         ExportableConfigSpec(KEY_COMMENT_NO_EMPTY_PAGE, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_COMMENT_NO_EMPTY_PAGE, false) },
         ExportableConfigSpec(KEY_COMMENT_NO_QOE, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_COMMENT_NO_QOE, false) },
         ExportableConfigSpec(KEY_COMMENT_NO_OPERATION, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_COMMENT_NO_OPERATION, false) },
+        ExportableConfigSpec(KEY_COMMENT_NO_HOTSPOT, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_COMMENT_NO_HOTSPOT, false) },
         ExportableConfigSpec(KEY_COMMENT_KEYWORD_FILTER_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_COMMENT_KEYWORD_FILTER_ENABLED, false) },
         ExportableConfigSpec(KEY_COMMENT_MIN_LEVEL_ENABLED, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_COMMENT_MIN_LEVEL_ENABLED, false) },
         ExportableConfigSpec(KEY_MINE_REMOVE_VIP, ExportableValueType.BOOLEAN) { it.getBoolean(KEY_MINE_REMOVE_VIP, false) },
@@ -337,6 +388,9 @@ object ModuleSettings {
         add(ExportableConfigSpec(KEY_CUSTOM_DOWNLOAD_CONCURRENCY, ExportableValueType.INT) { prefs ->
             prefs.getInt(KEY_CUSTOM_DOWNLOAD_CONCURRENCY, 1).coerceIn(1, 12)
         })
+        add(ExportableConfigSpec(KEY_PLAYER_CUSTOM_LONG_PRESS_SPEED_VALUE, ExportableValueType.INT) { prefs ->
+            getPlayerCustomLongPressSpeedTenths(prefs)
+        })
         add(ExportableConfigSpec(KEY_PURIFY_STORY_VIDEO_AD_TAGS, ExportableValueType.STRING_SET) {
             it.getStringSet(KEY_PURIFY_STORY_VIDEO_AD_TAGS, defaultStoryVideoAdTags)?.toSet() ?: defaultStoryVideoAdTags
         })
@@ -352,11 +406,20 @@ object ModuleSettings {
         add(ExportableConfigSpec(KEY_CUSTOM_CDN_HOST, ExportableValueType.STRING) { prefs ->
             getCustomCdnHost(prefs)
         })
+        add(ExportableConfigSpec(KEY_CDN_WIFI_PRIORITY, ExportableValueType.STRING) { prefs ->
+            prefs.getString(KEY_CDN_WIFI_PRIORITY, null)
+        })
+        add(ExportableConfigSpec(KEY_CDN_CELLULAR_PRIORITY, ExportableValueType.STRING) { prefs ->
+            prefs.getString(KEY_CDN_CELLULAR_PRIORITY, null)
+        })
         add(ExportableConfigSpec(KEY_HIDDEN_HOME_RECOMMEND_ITEMS, ExportableValueType.STRING_SET) {
             it.getStringSet(KEY_HIDDEN_HOME_RECOMMEND_ITEMS, emptySet<String>())?.toSet() ?: emptySet<String>()
         })
         add(ExportableConfigSpec(KEY_HIDDEN_HOME_RECOMMEND_TABS, ExportableValueType.STRING_SET) {
             it.getStringSet(KEY_HIDDEN_HOME_RECOMMEND_TABS, emptySet<String>())?.toSet() ?: emptySet<String>()
+        })
+        add(ExportableConfigSpec(KEY_BLOCKED_COMPONENT_POOLS, ExportableValueType.STRING_SET) {
+            it.getStringSet(KEY_BLOCKED_COMPONENT_POOLS, emptySet<String>())?.toSet() ?: emptySet<String>()
         })
         add(ExportableConfigSpec(KEY_HIDDEN_HOME_COMPONENTS, ExportableValueType.STRING_SET) {
             it.getStringSet(KEY_HIDDEN_HOME_COMPONENTS, emptySet<String>())?.toSet() ?: emptySet<String>()
@@ -385,6 +448,9 @@ object ModuleSettings {
 
     fun isSkipSplashAdEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_SKIP_SPLASH_AD_ENABLED, true)
+
+    fun isSplashAutoNightEnabled(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_SPLASH_AUTO_NIGHT_ENABLED, false)
 
     fun isBlockTeenagersModeDialogEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_BLOCK_TEENAGERS_MODE_DIALOG_ENABLED, false)
@@ -455,11 +521,32 @@ object ModuleSettings {
     fun isHidePlayerPortraitControlEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_HIDE_PLAYER_PORTRAIT_CONTROL_ENABLED, false)
 
+    fun isSplitScreenFullscreenEnabled(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_SPLIT_SCREEN_FULLSCREEN_ENABLED, false)
+
+    fun isDisableBackgroundPlayEnabled(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_DISABLE_BACKGROUND_PLAY_ENABLED, false)
+
     fun isPlayerTripleSpeedEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_PLAYER_TRIPLE_SPEED_ENABLED, false)
 
     fun isPlayerLongPressSpeedLockEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_PLAYER_LONG_PRESS_SPEED_LOCK_ENABLED, false)
+
+    const val MIN_CUSTOM_LONG_PRESS_SPEED_TENTHS = 10
+    const val MAX_CUSTOM_LONG_PRESS_SPEED_TENTHS = 80
+    const val DEFAULT_CUSTOM_LONG_PRESS_SPEED_TENTHS = 30
+
+    fun isPlayerCustomLongPressSpeedEnabled(prefs: SharedPreferences): Boolean =
+        isPlayerTripleSpeedEnabled(prefs) &&
+            prefs.getBoolean(KEY_PLAYER_CUSTOM_LONG_PRESS_SPEED_ENABLED, false)
+
+    fun getPlayerCustomLongPressSpeedTenths(prefs: SharedPreferences): Int =
+        prefs.getInt(KEY_PLAYER_CUSTOM_LONG_PRESS_SPEED_VALUE, DEFAULT_CUSTOM_LONG_PRESS_SPEED_TENTHS)
+            .coerceIn(MIN_CUSTOM_LONG_PRESS_SPEED_TENTHS, MAX_CUSTOM_LONG_PRESS_SPEED_TENTHS)
+
+    fun getPlayerCustomLongPressSpeedValue(prefs: SharedPreferences): Float =
+        getPlayerCustomLongPressSpeedTenths(prefs) / 10f
 
     fun isSkipVideoAdEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_SKIP_VIDEO_AD_ENABLED, false)
@@ -521,6 +608,12 @@ object ModuleSettings {
     fun isBlockChronosPromotionEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_BLOCK_CHRONOS_PROMOTION_ENABLED, false)
 
+    fun isBlockPgcActivityPopupEnabled(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_BLOCK_PGC_ACTIVITY_POPUP_ENABLED, false)
+
+    fun isBlockAiDeclaredVideoEnabled(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_BLOCK_AI_DECLARED_VIDEO_ENABLED, false)
+
     fun isAutoLikeVideoDetailEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_AUTO_LIKE_VIDEO_DETAIL_ENABLED, false)
 
@@ -578,6 +671,51 @@ object ModuleSettings {
         }
     }
 
+    fun getCdnPriorityList(prefs: SharedPreferences, key: String): List<String> {
+        val raw = prefs.getString(key, null).orEmpty()
+        if (raw.isBlank()) return emptyList()
+        return raw.split(',')
+            .mapNotNull { normalizeCdnHost(it.trim()) }
+            .distinct()
+            .take(MAX_CDN_PRIORITY_NODES)
+    }
+
+    fun saveCdnPriorityList(prefs: SharedPreferences, key: String, hosts: List<String>) {
+        prefs.edit().putString(key, hosts.joinToString(",")).apply()
+    }
+
+    fun getActiveCdnHosts(prefs: SharedPreferences, isCellular: Boolean): List<String> {
+        if (isCellular && prefs.getBoolean(KEY_CDN_CELLULAR_ENABLED, false)) {
+            val list = getCdnPriorityList(prefs, KEY_CDN_CELLULAR_PRIORITY)
+            if (list.isNotEmpty()) return list
+        }
+        if (prefs.getBoolean(KEY_CDN_WIFI_ENABLED, false)) {
+            val list = getCdnPriorityList(prefs, KEY_CDN_WIFI_PRIORITY)
+            if (list.isNotEmpty()) return list
+        }
+        // backward compat: migrate old single-host setting
+        if (prefs.getBoolean(KEY_CUSTOM_CDN_ENABLED, false)) {
+            val host = getCustomCdnHost(prefs)
+            if (host != null) return listOf(host)
+        }
+        return emptyList()
+    }
+
+    fun isCdnAudioIndependent(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_CDN_AUDIO_INDEPENDENT, false)
+
+    fun getCdnSpeedTestSizeMb(prefs: SharedPreferences): Int =
+        prefs.getInt(KEY_CDN_SPEED_TEST_SIZE_MB, 16).coerceIn(1, 64)
+
+    fun getCdnSpeedTestWarmupMb(prefs: SharedPreferences): Int =
+        prefs.getInt(KEY_CDN_SPEED_TEST_WARMUP_MB, 4).coerceIn(0, 16)
+
+    fun getCdnSpeedTestCooldownSec(prefs: SharedPreferences): Int =
+        prefs.getInt(KEY_CDN_SPEED_TEST_COOLDOWN_SEC, 0).coerceIn(0, 30)
+
+    fun isCdnSpeedTestParallel(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_CDN_SPEED_TEST_PARALLEL, true)
+
     fun getHomeRecommendTitleKeywordsText(prefs: SharedPreferences): String =
         prefs.getString(KEY_HOME_RECOMMEND_TITLE_KEYWORDS, "").orEmpty()
 
@@ -589,9 +727,6 @@ object ModuleSettings {
             .distinct()
             .take(MAX_HOME_RECOMMEND_TITLE_KEYWORDS)
             .toList()
-
-    fun isHomeRecommendVerticalAvDetailEnabled(prefs: SharedPreferences): Boolean =
-        prefs.getBoolean(KEY_HOME_RECOMMEND_VERTICAL_AV_DETAIL_ENABLED, false)
 
     fun isHomeRecommendPreloadEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_HOME_RECOMMEND_PRELOAD_ENABLED, false)
@@ -661,6 +796,35 @@ object ModuleSettings {
 
     fun getHiddenHomeComponents(prefs: SharedPreferences): Set<String> =
         prefs.getStringSet(KEY_HIDDEN_HOME_COMPONENTS, emptySet()) ?: emptySet()
+
+    fun isBlockAllComponentPoolsEnabled(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_BLOCK_ALL_COMPONENT_POOLS_ENABLED, false)
+
+    fun isCustomComponentPoolBlockEnabled(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_CUSTOM_COMPONENT_POOL_BLOCK_ENABLED, false)
+
+    fun getBlockedComponentPools(prefs: SharedPreferences): Set<String> =
+        if (!isCustomComponentPoolBlockEnabled(prefs)) emptySet()
+        else prefs.getStringSet(KEY_BLOCKED_COMPONENT_POOLS, emptySet())?.toSet() ?: emptySet()
+
+    fun getKnownComponentPools(prefs: SharedPreferences): Set<String> =
+        knownComponentPoolsCache
+            ?: prefs.getStringSet(KEY_KNOWN_COMPONENT_POOLS, emptySet())?.toSet()
+            ?: emptySet()
+
+    fun cacheKnownComponentPools(items: Set<String>) {
+        knownComponentPoolsCache = items.toSet()
+    }
+
+    fun encodeComponentPool(name: String, moduleCount: Int): String =
+        name.replace('	', ' ').trim() + "	" + moduleCount
+
+    fun decodeComponentPool(raw: String): Pair<String, Int>? {
+        val parts = raw.split('	', limit = 2)
+        val name = parts.getOrNull(0)?.trim().orEmpty()
+        if (name.isEmpty()) return null
+        return name to (parts.getOrNull(1)?.toIntOrNull() ?: 0)
+    }
 
     fun getKnownHomeComponents(prefs: SharedPreferences): Set<String> =
         knownHomeComponentsCache
@@ -744,6 +908,9 @@ object ModuleSettings {
     fun isStoryVideoDefaultLaunchEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_STORY_VIDEO_DEFAULT_LAUNCH_ENABLED, false)
 
+    fun isStoryVideoAsDetailEnabled(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_STORY_VIDEO_AS_DETAIL_ENABLED, false)
+
     fun isStoryVideoImmersiveFullscreenEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_STORY_VIDEO_IMMERSIVE_FULLSCREEN_ENABLED, false)
 
@@ -798,6 +965,9 @@ object ModuleSettings {
     fun isRemoveLiveRoomBlurMaskEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_REMOVE_LIVE_ROOM_BLUR_MASK_ENABLED, false)
 
+    fun isDisableLiveRoomVerticalSwipeEnabled(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_DISABLE_LIVE_ROOM_VERTICAL_SWIPE_ENABLED, false)
+
     fun isDisableLongPressCopyEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_DISABLE_LONG_PRESS_COPY_ENABLED, false)
 
@@ -840,6 +1010,9 @@ object ModuleSettings {
     fun isSearchSuggestCleanEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_SEARCH_SUGGEST_CLEAN_ENABLED, false)
 
+    fun isSearchResultAdBlockEnabled(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_SEARCH_RESULT_AD_BLOCK_ENABLED, false)
+
     fun isFullNumberFormatEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_FULL_NUMBER_FORMAT_ENABLED, false)
 
@@ -875,6 +1048,9 @@ object ModuleSettings {
 
     fun isCommentNoOperationEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_COMMENT_NO_OPERATION, false)
+
+    fun isCommentNoHotspotEnabled(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_COMMENT_NO_HOTSPOT, false)
 
     fun isCommentKeywordFilterEnabled(prefs: SharedPreferences): Boolean =
         prefs.getBoolean(KEY_COMMENT_KEYWORD_FILTER_ENABLED, false)
